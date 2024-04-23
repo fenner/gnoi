@@ -298,6 +298,22 @@ message TracerouteResponse {
     repeated uint32 data = 3;     // raw words associated with this data
   }
 
+  message IcmpExtInfo {
+    enum InfoType {
+       DEFAULT = 0;
+       INPUT = 1;       // rfc5837 interface role 0
+       SUBIP = 2;       // rfc5837 interface role 1
+       OUTPUT = 3;      // rfc5837 interface role 2
+       NEXTHOP = 4;     // rfc5837 interface role 3
+       NODE = 5;        // draft-fenner-intarea-extended-icmp-hostid
+    }
+    InfoType type = 1;          // Type of information
+    uint32 ifindex = 2;         // ifIndex value, if present
+    string addr = 3;            // address value, if present
+    string name = 4;            // interface name or node name, if present
+    uint32 mtu = 5;             // mtu, if present
+  }
+
   // The following fields provide the disposition of a single traceroute
   // packet.
   int32 hop = 5;                // Hop number. required.
@@ -309,6 +325,7 @@ message TracerouteResponse {
   map<string, string> mpls = 11; // MPLS key/value pairs.
   repeated int32 as_path = 12;   // AS path.
   repeated IcmpExtData icmp_ext_data = 13;  // ICMP extension data
+  repeated IcmpExtInfo icmp_ext_info = 14;  // Parsed ICMP extension info
 }
 
 // Package defines a single package file to be placed on the target.
